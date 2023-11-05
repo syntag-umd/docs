@@ -24,12 +24,12 @@
         "description": "Returns all channels given a company uuid",
         "parameters": [
           {
-            "name": "limit",
+            "name": "company_uuid",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "description": "a company's uuid",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "uuid",
+              "format": "str"
             }
           }
         ],
