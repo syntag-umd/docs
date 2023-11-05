@@ -1,7 +1,7 @@
 {
-  "openapi": "3.0.1",
+  "syntag": "1.0.0",
   "info": {
-    "title": "OpenAPI Plant Store",
+    "title": "SynTag's API for tagging and routing customer complaints",
     "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
     "license": {
       "name": "MIT"
@@ -19,7 +19,7 @@
     }
   ],
   "paths": {
-    "/plants": {
+    "/channels": {
       "get": {
         "description": "Returns all plants from the system that the user has access to",
         "parameters": [
