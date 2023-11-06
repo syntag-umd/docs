@@ -75,6 +75,11 @@
         "api-reference/endpoint/post_register_signup",
         "api-reference/endpoint/post_register_verify",
         "api-reference/endpoint/post_zendesk_upload_tickets"
+        "api-reference/endpoint/post_generate",
+        "api-reference/endpoint/get_tags",
+        "api-reference/endpoint/post_train",
+        "api-reference/endpoint/post_analytics",
+        "api-reference/endpoint/post_ticket"
       ]
     }
   ],
