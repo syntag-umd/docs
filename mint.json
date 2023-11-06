@@ -50,7 +50,7 @@
     },
     {
       "group": "About",
-      "pages": ["about", "faq"]
+      "pages": ["about"]
     },
     {
       "group": "API Documentation",
