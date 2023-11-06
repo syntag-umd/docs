@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.syntag.com/api/v1",
+      "url": "https://syntag.com/api/v1",
       "description": "SynTag API"
     }
   ],
