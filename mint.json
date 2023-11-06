@@ -73,6 +73,7 @@
         "api-reference/endpoint/get_tags",
         "api-reference/endpoint/post_train",
         "api-reference/endpoint/post_analytics",
+        "api-reference/endpoint/post_ticket"
       ]
     }
   ],
