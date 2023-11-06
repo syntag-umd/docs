@@ -68,7 +68,12 @@
         "api-reference/endpoint/post_echo",
         "api-reference/endpoint/post_create_engine",
         "api-reference/endpoint/get_id",
-        "api-reference/endpoint/post_initialization"
+        "api-reference/endpoint/post_initialization",
+        "api-reference/endpoint/post_generate",
+        "api-reference/endpoint/get_tags",
+        "api-reference/endpoint/post_train",
+        "api-reference/endpoint/post_analytics",
+        "api-reference/endpoint/post_ticket"
       ]
     }
   ],
