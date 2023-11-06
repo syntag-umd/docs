@@ -64,9 +64,11 @@
     {
       "group": "Endpoint Examples",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/endpoint/get_echo",
+        "api-reference/endpoint/post_echo",
+        "api-reference/endpoint/post_create_engine",
+        "api-reference/endpoint/get_id",
+        "api-reference/endpoint/post_initialization"
       ]
     }
   ],

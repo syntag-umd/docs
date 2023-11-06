@@ -1,72 +1,274 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "home-iot-api",
+    "description": "SynTag's v1 API!",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
+      "url": "https://api.syntag.com/api/v1",
+      "description": "SynTag API"
     }
   ],
   "paths": {
-    "/plants": {
+    "/engine/echo": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
+        "tags": [
+          "engine"
         ],
+        "summary": "Retrieve engine id given company public and private ids",
+        "description": "get hugging_face_id",
+        "operationId": "echo",
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Hugging Face ID Retrieved Successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
+                  "$ref": "#/components/schemas/EngineIDList"
                 }
               }
             }
           },
           "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
-        }
+        },
+        "x-openapi-router-controller": "syntag.engine.controller"
       },
       "post": {
-        "description": "Creates a new plant in the store",
+        "tags": [
+          "engine"
+        ],
+        "summary": "Retrieve engine id given company public and private ids",
+        "description": "get hugging_face_id",
+        "operationId": "echo2",
         "requestBody": {
-          "description": "Plant to add to the store",
+          "description": "hi",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hugging Face ID Retrieved Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EngineIDList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-openapi-router-controller": "syntag.engine.controller"
+      }
+    },
+    "/engine/create_engine": {
+      "post": {
+        "tags": [
+          "engine"
+        ],
+        "summary": "Creates and pushes a default engine.",
+        "description": "post engine",
+        "operationId": "create_engine",
+        "requestBody": {
+          "description": "Includes the repo id and the company uuid to create the engine for.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EngineCreationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Engine Created Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EngineCreationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.engine.controller"
+      }
+    },
+    "/engine/get_id": {
+      "get": {
+        "tags": [
+          "engine"
+        ],
+        "summary": "Retrieve engine id given company public and private ids",
+        "description": "get hugging_face_id",
+        "operationId": "engine_get_ids",
+        "parameters": [
+          {
+            "name": "company_uuid",
+            "in": "query",
+            "description": "the company public id (uuid)",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hugging Face ID Retrieved Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EngineIDList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.engine.controller"
+      }
+    },
+    "/engine/initialization": {
+      "post": {
+        "tags": [
+          "engine"
+        ],
+        "summary": "Initialize a Tagging Engine",
+        "description": "Initialize a tagging engine with the provided settings.\n",
+        "operationId": "engine_initialization_post",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the tagging engine."
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Initialization request for the tagging engine.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitializationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Tagging Engine Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.engine.controller"
+      }
+    },
+    "/engine/generate": {
+      "post": {
+        "tags": [
+          "engine"
+        ],
+        "summary": "Generate Tags",
+        "description": "Generate tags for a tagging engine based on input complaints and parameters.\n",
+        "operationId": "engine_generate_post",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the tagging engine."
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Tag generation request.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagGenerationRequest"
               }
             }
           },
@@ -74,121 +276,1479 @@
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "Tags Generated",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/TagGenerationResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.engine.controller"
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/engine/tags": {
+      "get": {
+        "tags": [
+          "engine"
+        ],
+        "summary": "Get Tags for a Tagging Engine",
+        "description": "Get a list of all tags associated with the provided tagging engine.\n",
+        "operationId": "engine_tags_get",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
+            "name": "engine_id",
+            "in": "query",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string",
+              "description": "The ID of the tagging engine."
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "Tags Retrieved Successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/EngineTagList"
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.engine.controller"
+      },
+      "patch": {
+        "tags": [
+          "engine"
+        ],
+        "summary": "Update Tags for a Tagging Engine",
+        "description": "Update tags associated with the provided tagging engine.\n",
+        "operationId": "engine_tags_patch",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the tagging engine."
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Tag update request for the tagging engine.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TagUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tags Updated Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagUpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Tags Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.engine.controller"
+      }
+    },
+    "/engine/train": {
+      "post": {
+        "tags": [
+          "engine"
+        ],
+        "summary": "Train a Tagging Engine",
+        "description": "Train a tagging engine with the provided complaints and tags.\n",
+        "operationId": "engine_train_post",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the tagging engine."
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Training request for the tagging engine.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrainRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Training Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrainResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.engine.controller"
+      }
+    },
+    "/analytics": {
+      "post": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Retrieve Analytics Report",
+        "description": "Retrieve an analytics report based on specified parameters.\n",
+        "operationId": "analytics_get",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the tagging engine."
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Start date for the analytics report.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "End date for the analytics report.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "List of tags to include in the report.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "channels",
+            "in": "query",
+            "description": "List of channels to include in the report.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "Page number for pagination.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Page size for pagination.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Metadata for filtering the queries",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataFilterQuery"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Analytics Report Retrieved Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsReport"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.analytics.controller"
+      }
+    },
+    "/analytics/channels": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Retrieve All Channels",
+        "description": "Retrieve a list of all channels.",
+        "operationId": "analytics_channels_get",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "description": "The ID of the tagging engine.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Channels Retrieved Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.analytics.controller"
+      },
+      "patch": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Update Channels",
+        "description": "Add or delete channels.\n",
+        "operationId": "analytics_channels_patch",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "description": "The ID of the tagging engine.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Request body to specify channels to add or delete.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChannelUpdateResponse"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Channels Updated Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.analytics.controller"
+      }
+    },
+    "/analytics/tickets": {
+      "post": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Retrieve Ticket History for a Specific Day",
+        "description": "Retrieve the complete ticket history for a specific day.\n",
+        "operationId": "analytics_tickets_get",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "description": "(Optional) The ID of the tagging engine.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "(Optional) The specific start date for which to retrieve the ticket history.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "(Optional) The specific end date for which to retrieve the ticket history.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "List of tags to include in the report.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "channels",
+            "in": "query",
+            "description": "List of channels to include in the report.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "description": "Page number for pagination.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Page size for pagination.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Metadata for filtering the queries",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataFilterQuery"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Ticket History Retrieved Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketHistory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.analytics.controller"
+      }
+    },
+    "/analytics/diagnostics": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Retrieve Diagnostics for a Tagging Engine",
+        "description": "Retrieve diagnostic information for a tagging engine.\n",
+        "operationId": "analytics_diagnostics_get",
+        "parameters": [
+          {
+            "name": "engine_id",
+            "in": "query",
+            "description": "The ID of the tagging engine.",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Diagnostics Retrieved Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagnosticEntry"
+                  },
+                  "x-content-type": "application/json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.analytics.controller"
+      }
+    },
+    "/zendesk/upload-tickets": {
+      "post": {
+        "tags": [
+          "zendesk"
+        ],
+        "summary": "Upload tickets from Zendesk to train your tagging model",
+        "description": "Upload tickets from Zendesk to train your tagging model",
+        "operationId": "upload_past_tickets",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadTicketsZendeskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ticket Upload Request Recieved"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "x-openapi-router-controller": "syntag.zendesk.controller"
+      }
+    },
+    "/zendesk/initiate-auth": {
+      "get": {
+        "tags": [
+          "zendesk"
+        ],
+        "summary": "Initiate Zendesk Authentication",
+        "description": "Initiate Zendesk Authentication",
+        "operationId": "zendesk_initiate_auth",
+        "parameters": [
+          {
+            "name": "subdomain",
+            "in": "query",
+            "description": "The subdomain of the Zendesk account",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Zendesk Authenticated"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-openapi-router-controller": "syntag.zendesk.controller"
+      }
+    },
+    "/zendesk/auth": {
+      "get": {
+        "tags": [
+          "zendesk"
+        ],
+        "summary": "Authenticate with Zendesk",
+        "description": "Authenticate with Zendesk",
+        "operationId": "zendesk_auth",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "The code returned by Zendesk",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "error",
+            "in": "query",
+            "description": "The error returned by Zendesk",
+            "required": false,
+            "style": "form",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": "The state returned by Zendesk",
+            "required": true,
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Zendesk Authenticated"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-openapi-router-controller": "syntag.zendesk.controller"
+      }
+    },
+    "/register/signup": {
+      "post": {
+        "tags": [
+          "register"
+        ],
+        "summary": "Register a new user",
+        "description": "Register a new user",
+        "operationId": "signup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Registered Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignupResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-openapi-router-controller": "syntag.registration.controller"
+      }
+    },
+    "/register/verify": {
+      "post": {
+        "tags": [
+          "register"
+        ],
+        "summary": "Verify a new user",
+        "description": "Verify a new user",
+        "operationId": "verify",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Verified Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "x-openapi-router-controller": "syntag.registration.controller"
       }
     }
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "InitializationRequest": {
         "type": "object",
         "properties": {
           "name": {
-            "description": "The name of the plant",
-            "type": "string"
+            "type": "string",
+            "description": "(Optional) Name for the tagging engine."
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "isGPTBacked": {
+            "type": "boolean",
+            "description": "(Optional) Whether the engine should be GPT-backed."
+          },
+          "tags": {
+            "type": "array",
+            "description": "(Optional) List of tags.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "descriptions": {
+            "type": "array",
+            "description": "(Optional) List of descriptions (must match the length of the 'tags' list).",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
+      "InitializationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the created tagging engine."
+          }
+        },
+        "example": {
+          "id": "id"
+        }
+      },
+      "TrainRequest": {
+        "type": "object",
+        "properties": {
+          "complaints": {
+            "type": "array",
+            "description": "List of complaints to train the engine.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "description": "(Optional) List of tags (must match the length of the 'complaints' list).",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TrainResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message."
+          }
+        },
+        "example": {
+          "message": "message"
+        }
+      },
+      "TagGenerationRequest": {
+        "type": "object",
+        "properties": {
+          "complaints": {
+            "description": "Either a single text complaint or a list of text complaints.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array"
+              }
+            ]
+          },
+          "numTags": {
+            "description": "The number of tags to return | 'single' | 'auto'.",
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "ids": {
+            "type": "array",
+            "description": "(Optional) List of IDs (must match the length of the 'complaints' list).",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata",
+            "description": "Additional complaint metadata (will be available in analytics)"
+          }
+        }
+      },
+      "TagGenerationResponse": {
+        "oneOf": [
           {
-            "$ref": "#/components/schemas/Plant"
+            "type": "string"
           },
           {
-            "required": [
-              "id"
-            ],
+            "type": "array"
+          },
+          {
             "type": "object",
             "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               }
             }
           }
         ]
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "TagUpdateResponse": {
+        "type": "object",
+        "description": "Added and deleted tags.",
+        "properties": {
+          "added_tags": {
+            "type": "array",
+            "description": "List of added tags.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deleted_tags": {
+            "type": "array",
+            "description": "List of deleted tags.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ChannelUpdateResponse": {
+        "type": "object",
+        "description": "Added and deleted channels.",
+        "properties": {
+          "added_channels": {
+            "type": "array",
+            "description": "List of added channels.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deleted_channels": {
+            "type": "array",
+            "description": "List of deleted channels.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TagUpdateRequest": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
+          "tagsToAdd": {
+            "type": "array",
+            "description": "(Optional) List of tags to add.",
+            "items": {
+              "type": "string"
+            }
           },
-          "message": {
+          "tagsToDelete": {
+            "type": "array",
+            "description": "(Optional) List of tags to delete.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tagsToUpdate": {
+            "$ref": "#/components/schemas/TagUpdateRequest_tagsToUpdate"
+          }
+        }
+      },
+      "AnalyticsReport": {
+        "type": "object",
+        "properties": {
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "accuracy": {
+                    "type": "string"
+                  },
+                  "daily_counts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "days": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "ticket_count": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ChannelList": {
+        "type": "object",
+        "properties": {
+          "channels": {
+            "type": "array",
+            "description": "(Optional) List of channels.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ChannelUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "channelsToAdd": {
+            "type": "array",
+            "description": "(Optional) List of channels to add.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "channelsToDelete": {
+            "type": "array",
+            "description": "(Optional) List of channels to delete.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TicketHistory": {
+        "type": "object",
+        "properties": {
+          "ticket_history": {
+            "type": "array",
+            "description": "List of ticket history items.",
+            "items": {
+              "$ref": "#/components/schemas/TicketHistory_inner"
+            }
+          }
+        }
+      },
+      "DiagnosticEntry": {
+        "type": "object",
+        "properties": {
+          "issue_description": {
+            "type": "string",
+            "description": "Description of the diagnostic issue."
+          },
+          "offending_tag": {
+            "type": "string",
+            "description": "The offending tag causing the issue."
+          },
+          "influenced_tags": {
+            "type": "array",
+            "description": "List of other tags influenced by the issue.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "potential_fix": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiagnosticEntry_potential_fix"
+            }
+          }
+        },
+        "example": {
+          "issue_description": "issue_description",
+          "potential_fix": [
+            {
+              "tag_name": "tag_name",
+              "modifier": "modifier",
+              "action": "action",
+              "value": "value"
+            },
+            {
+              "tag_name": "tag_name",
+              "modifier": "modifier",
+              "action": "action",
+              "value": "value"
+            }
+          ],
+          "offending_tag": "offending_tag",
+          "influenced_tags": [
+            "influenced_tags",
+            "influenced_tags"
+          ]
+        }
+      },
+      "Metadata": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "Key for the metadata."
+            },
+            "value": {
+              "type": "string",
+              "description": "Value for the metadata."
+            }
+          }
+        }
+      },
+      "MetadataFilterQuery": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "description": "Field to filter on."
+                },
+                "operator": {
+                  "type": "string",
+                  "description": "Operator to use for filtering."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value to filter on."
+                }
+              }
+            }
+          }
+        }
+      },
+      "TagUpdateRequest_tagsToUpdate": {
+        "type": "object",
+        "properties": {
+          "old_tag_names": {
+            "type": "array",
+            "description": "Old tag names",
+            "items": {
+              "type": "string"
+            }
+          },
+          "new_tag_names": {
+            "type": "array",
+            "description": "New tag names",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TicketHistory_inner": {
+        "type": "object",
+        "properties": {
+          "engine_id": {
+            "type": "string",
+            "description": "The ID of the tagging engine."
+          },
+          "ticket_id": {
+            "type": "string",
+            "description": "The ID of the ticket."
+          },
+          "ticket_content": {
+            "type": "string",
+            "description": "The content of the ticket."
+          },
+          "channel": {
+            "type": "string",
+            "description": "The channel of the ticket."
+          },
+          "initial_tag": {
+            "type": "string",
+            "description": "The initial ticket tag."
+          },
+          "final_tag": {
+            "type": "string",
+            "description": "The final ticket tag."
+          },
+          "date": {
+            "type": "string",
+            "description": "Date and time of the incoming ticket.",
+            "format": "date"
+          },
+          "successful_tag": {
+            "type": "boolean",
+            "description": "Whether the ticket was successfully tagged."
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata",
+            "description": "Metadata associated with the ticket."
+          }
+        },
+        "example": {
+          "date": "2000-01-23T04:56:07.000Z",
+          "metadata": {},
+          "final_tag": "final_tag",
+          "initial_tag": "initial_tag",
+          "channel": "channel",
+          "content": "content"
+        }
+      },
+      "DiagnosticEntry_potential_fix": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Action to be taken for the fix."
+          },
+          "tag_name": {
+            "type": "string",
+            "description": "Name of the affected tag."
+          },
+          "modifier": {
+            "type": "string",
+            "description": "Modifier to be applied."
+          },
+          "value": {
+            "type": "string",
+            "description": "Value to set for the tag."
+          }
+        },
+        "example": {
+          "tag_name": "tag_name",
+          "modifier": "modifier",
+          "action": "action",
+          "value": "value"
+        }
+      },
+      "EngineIDList": {
+        "type": "object",
+        "properties": {
+          "engine_ids": {
+            "type": "array",
+            "description": "(Optional) List of HuggingFaceIDs.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "EngineTagList": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "description": "(Optional) List of Tags.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TagsUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "tagsToAdd": {
+            "type": "array",
+            "description": "(Optional) List of channels to add.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tagsToDelete": {
+            "type": "array",
+            "description": "(Optional) List of channels to delete.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UploadTicketsZendeskRequest": {
+        "type": "object",
+        "properties": {
+          "zendesk_link": {
             "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "api_key": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assignees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "filter_by": {
+            "type": "object",
+            "description": "Query params for the Zendesk API Get Tickets endpoint at https://developer.zendesk.com/api-reference/ticketing/tickets/tickets/#json-format",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SignupRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "SignupResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Verification code."
+          }
+        }
+      },
+      "VerifyRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address."
+          },
+          "verification_code": {
+            "type": "string",
+            "description": "Verification code."
+          }
+        }
+      },
+      "VerifyResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message."
+          },
+          "api_key": {
+            "type": "string",
+            "description": "API key."
+          }
+        }
+      },
+      "EngineCreationRequest": {
+        "type": "object",
+        "properties": {
+          "company_uuid": {
+            "type": "string",
+            "description": "Company UUID."
+          },
+          "repo_id": {
+            "type": "string",
+            "description": "Repo ID."
+          }
+        }
+      },
+      "EngineCreationResponse": {
+        "type": "object",
+        "properties": {
+          "repo_url": {
+            "type": "string",
+            "description": "Repo URL."
+          },
+          "repo_id": {
+            "type": "string",
+            "description": "Repo ID."
           }
         }
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      "APIKeyAuth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "x-apikeyInfoFunc": "syntag.authorization.controller.check_APIKeyAuth"
       }
     }
   }
