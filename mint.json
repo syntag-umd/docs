@@ -57,24 +57,43 @@
       "pages": ["api-reference/introduction"]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Endpoints",
       "pages": [
-        "api-reference/endpoint/get_echo",
-        "api-reference/endpoint/post_echo",
-        "api-reference/endpoint/post_create_engine",
-        "api-reference/endpoint/get_id",
-        "api-reference/endpoint/post_initialization",
-        "api-reference/endpoint/get_analytics_diagnostics",
-        "api-reference/endpoint/get_zendesk_auth",
-        "api-reference/endpoint/get_zendesk_initiate_auth",
-        "api-reference/endpoint/post_register_signup",
-        "api-reference/endpoint/post_register_verify",
-        "api-reference/endpoint/post_zendesk_upload_tickets",
-        "api-reference/endpoint/post_generate",
-        "api-reference/endpoint/get_tags",
-        "api-reference/endpoint/post_train",
-        "api-reference/endpoint/post_analytics",
-        "api-reference/endpoint/post_tickets"
+        {
+          "group": "Engine",
+          "pages": [
+            "api-reference/endpoint/get_engine_id",
+            "api-reference/endpoint/get_engine_tags",
+            "api-reference/endpoint/post_create_engine",
+            "api-reference/endpoint/post_engine_initialization",
+            "api-reference/endpoint/post_engine_generate",
+            "api-reference/endpoint/post_engine_train"
+          ]
+        },
+        {
+          "group": "Analytics",
+          "pages": [
+            "api-reference/endpoint/get_analytics_channels",
+            "api-reference/endpoint/get_analytics_diagnostics",
+            "api-reference/endpoint/post_analytics",
+            "api-reference/endpoint/post_analytics_tickets"
+          ]
+        },
+        {
+          "group": "Zendesk",
+          "pages": [
+            "api-reference/endpoint/get_zendesk_auth",
+            "api-reference/endpoint/get_zendesk_initiate_auth",
+            "api-reference/endpoint/post_zendesk_upload_tickets"
+          ]
+        },
+        {
+          "group": "Register",
+          "pages": [
+            "api-reference/endpoint/post_register_signup",
+            "api-reference/endpoint/post_register_verify"
+          ]
+        }
       ]
     }
   ],
