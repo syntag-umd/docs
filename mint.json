@@ -74,7 +74,6 @@
           "group": "Analytics",
           "pages": [
             "api-reference/endpoint/get_analytics_channels",
-            "api-reference/endpoint/get_analytics_diagnostics",
             "api-reference/endpoint/post_analytics",
             "api-reference/endpoint/post_analytics_tickets"
           ]
