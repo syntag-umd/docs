@@ -64,6 +64,7 @@
           "pages": [
             "api-reference/endpoint/get_engine_id",
             "api-reference/endpoint/get_engine_tags",
+            "api-reference/endpoint/patch_engine_tags",
             "api-reference/endpoint/post_create_engine",
             "api-reference/endpoint/post_engine_initialization",
             "api-reference/endpoint/post_engine_generate",
